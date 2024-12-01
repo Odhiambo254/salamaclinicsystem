@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h3 class="text-center">Check Returning Patient</h3>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary w-100">Check Patient</button>
+                </form>
+                {% if patient_details %}
+                <div class="mt-4">
+                    <h5>Patient Details:</h5>
+                    <p><strong>Name:</strong> {{ patient_details.first_name }} {{ patient_details.last_name }}</p>
+                    <p><strong>Phone:</strong> {{ patient_details.phone }}</p>
+                    <p><strong>Email:</strong> {{ patient_details.email }}</p>
+                    <p><strong>Inpatient Number:</strong> {{ patient_details.inpatient_number }}</p>
+                </div>
+                {% endif %}
+                {% if messages %}
+                <div class="mt-3">
+                    {% for message in messages %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

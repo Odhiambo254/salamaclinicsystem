@@ -1,0 +1,32 @@
+body {
+    background-image: url('images/home_photo.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+}
+
+.login-container {
+    background-color: rgba(255, 255, 255, 0.9); /* White with slight transparency */
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.login-title {
+    color: #0056b3; /* Professional blue shade */
+    font-weight: bold;
+}
+
+.form-label {
+    color: #0056b3; /* Matching form label color */
+}
+
+.btn-primary {
+    background-color: #0056b3;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #003d80;
+}
