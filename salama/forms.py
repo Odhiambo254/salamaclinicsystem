@@ -65,14 +65,30 @@ class RegisterPatientForm(forms.Form):
             'class': 'form-control',
             'placeholder': 'Enter Last Name'
         }))
-        phone = forms.CharField(max_length=15, widget=forms.TextInput(attrs={
+        id_number=forms.CharField(max_length=8, widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter ID Number'
+        }))
+        phone = forms.CharField(max_length=13, widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Enter Phone Number'
         }))
-        email = forms.EmailField(widget=forms.EmailInput(attrs={
+        address = forms.CharField(widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Enter Email'
+            'placeholder': 'Enter address'
         }))
+        next_of_kin=forms.CharField(max_length=50, widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter Next Of-Kin'
+        }))
+
+        def clean_id_number(self):
+            id_number = self.cleaned_data.get('id_number')
+            # Ensure ID number has exactly 11 digits
+            if len(str(id_number)) != 8:
+                raise forms.ValidationError("ID Number must be exactly 8 digits.")
+            return id_number
+
 
 
 class CheckReturningPatientForm(forms.Form):

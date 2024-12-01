@@ -1,3 +1,5 @@
+from wsgiref.validate import validator
+
 from django.db import models
 
 # Create your models here.
@@ -15,7 +17,10 @@ class Patient(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     phone = models.CharField(max_length=15, unique=True)
-    email = models.EmailField(unique=True)
+    address=models.CharField(max_length=50 , default="uknown" )
+    id_number=models.CharField(max_length=11, unique=True , null=True)
+    next_of_kin=models.CharField(max_length=50 , null=True)
+
     inpatient_number = models.CharField(max_length=10, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

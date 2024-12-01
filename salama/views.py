@@ -92,16 +92,22 @@ def register_patient(request):
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             phone = form.cleaned_data['phone']
-            email = form.cleaned_data['email']
+            id_number=form.cleaned_data['id_number']
+            next_of_kin=form.cleaned_data['next_of_kin']
+            address = form.cleaned_data['address']
+
             # Generate unique inpatient number
-            unique_number = f"{first_name[0].upper()}{last_name[0].upper()}{randint(10, 99)}"
+            unique_number = f"{first_name[0].upper()}{last_name[0].upper()}{randint(100, 999)}"
             # Save patient data to the database
             patient = Patient(
                 first_name=first_name,
                 last_name=last_name,
                 phone=phone,
-                email=email,
-                inpatient_number=unique_number
+                address=address,
+                inpatient_number=unique_number,
+                next_of_kin=next_of_kin,
+                id_number=id_number,
+
             )
             patient.save()
             messages.success(request, f"Patient registered successfully! Inpatient Number: {unique_number}")
