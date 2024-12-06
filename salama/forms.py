@@ -1,5 +1,5 @@
 from django import forms
-from .models import Appointment, Patient
+from .models import Appointment, Patient, Billing
 #login form.
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=50, widget=forms.TextInput(attrs={
@@ -97,13 +97,27 @@ class CheckReturningPatientForm(forms.Form):
         'placeholder': 'Enter Inpatient Number'
     }))
 
-
+#apointmentform
 class AppointmentForm(forms.ModelForm):
     class Meta:
         model = Appointment
-        fields = ['patient', 'appointment_date']
+        fields = ['patient','appointment_date']
 
     # Optionally, you can add a list of patients in the form to make selection easier
     def __init__(self, *args, **kwargs):
         super(AppointmentForm, self).__init__(*args, **kwargs)
         self.fields['patient'].queryset = Patient.objects.all()  # Make sure this line is here
+
+
+
+#billing form
+class BillingForm(forms.ModelForm):
+    class Meta:
+        model= Billing
+        fields=['patient','amount_due']
+
+    def __init__(self, *args, **kwargs):
+        super(BillingForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+

@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Admin, Patient , Appointment
+from .models import Admin, Patient,Appointment, Billing
 from .forms import LoginForm,AppointmentForm
-from .forms import SignupForm, PasswordResetForm, RegisterPatientForm, CheckReturningPatientForm
+from .forms import BillingForm, SignupForm, PasswordResetForm, RegisterPatientForm, CheckReturningPatientForm
 from random import randint
 from django.contrib.auth.decorators import login_required
 
@@ -12,9 +12,9 @@ def admin_login(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user = Admin.objects.filter(username=username, password=password).first()
-            if user:
-                request.session['admin_id'] = user.id
+            admin = Admin.objects.filter(username=username, password=password).first()
+            if admin:
+                request.session['admin_id'] = admin.id
                 print("Session admin_id set to:", request.session['admin_id'])
                 messages.success(request, 'Logged in successfully')
 
@@ -75,7 +75,7 @@ def dashboard(request):
     admin_id = request.session.get('admin_id')
     try:
         admin = Admin.objects.get(id=admin_id)
-        welcome_message = f"Welcome, {admin.username}!"
+        welcome_message = f"Welcome, {admin.username}."
         return render(request, 'admin_dashboard.html', {'welcome_message': welcome_message})
     except Admin.DoesNotExist:
         messages.error(request, "Admin session expired, please log in again.")
@@ -158,7 +158,7 @@ def book_appointment(request):
                 # Redirect to the same page (to show the updated list of appointments)
                 return redirect('bookappointment')
             except Patient.DoesNotExist:
-                messages.error(request, "Patient not found!")
+                    (messages.error(request, "Patient not found!"))
         else:
             messages.error(request, "Invalid form submission.")
     else:
@@ -175,3 +175,41 @@ def book_appointment(request):
 #about us page
 def about(request):
     return render  (request , 'about us.html')
+def departments(request):
+    return render(request , 'department_detail.html')
+
+def home(request):
+    return render(request, 'home.html')
+
+#billing view
+
+def view_bills(request):
+    bills=Billing.objects.all() # this will retrieve all bills
+    return render (request ,'bills.html', {'bills':bills})
+
+def pay_bill(request):
+    bill =get_object_or_404(Billing, id=bill_id)
+    if request.method =='POST':
+        amount=float(request.POST.get('amount'))
+        if amount > bill.balance_due():
+            messages.error(request, 'payment exceeds the balance due')
+        else:
+            bill.amount_paid  += amount
+            if bill.balance_due() < 0:
+                bill.payment_status = 'Paid'
+            bill.save()
+            messages.success(request, f'Payment of {amount} made succesfully.')
+    return render (request,'pay_bill.html', {'bill':bill})
+
+
+#create bill
+def create_bill(request):
+    if request.method == 'POST':
+        form = BillingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Billing record created successfully!')
+            return redirect('views_bill')  # Redirect to the billing list
+    else:
+        form = BillingForm()
+    return render(request, 'create_bill.html', {'form': form})

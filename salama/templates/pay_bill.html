@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Pay Bill</h2>
+    <p><strong>Patient:</strong> {{ bill.patient.first_name }} {{ bill.patient.last_name }}</p>
+    <p><strong>Amount Due:</strong> {{ bill.amount_due }}</p>
+    <p><strong>Amount Paid:</strong> {{ bill.amount_paid }}</p>
+    <p><strong>Balance:</strong> {{ bill.balance_due }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="amount" class="form-label">Enter Payment Amount:</label>
+            <input type="number" class="form-control" name="amount" id="amount" required>
+        </div>
+        <button type="submit" class="btn btn-success">Pay</button>
+    </form>
+</div>
+{% endblock %}

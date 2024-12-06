@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+    
+    <div class="container mt-4">
+    <h1>Appointments Pending Confirmation</h1>
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Appointment Date</th>
+                <th>status</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+            <tr>
+                <td>{{ appointment.patient_name }}</td>
+                <td>{{ appointment.date }}</td>
+                <td>{{ appointment.status }}</td>
+                <td>
+                    <form method="POST" action="{% url 'pending' appointment.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-success btn-sm">Confirm</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">No pending appointments</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

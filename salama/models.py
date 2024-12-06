@@ -27,11 +27,31 @@ class Patient(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.inpatient_number}"
 
-
 class Appointment(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    appointment_date = models.DateTimeField()
-    status = models.CharField(max_length=20, choices=[('booked', 'Booked'), ('completed', 'Completed')], default='booked')
+        patient = models.ForeignKey('Patient',  on_delete=models.CASCADE)
+        appointment_date = models.DateTimeField()
+        status = models.CharField(max_length=20, choices=[('booked', 'Booked'), ('completed', 'Completed')],
+                                  default='booked')
+        def __str__(self):
+            return f"Appointment for {self.patient.first_name} {self.patient.last_name} on {self.appointment_date}"
 
+
+
+#billing model
+class Billing(models.Model):
+    patient=models.ForeignKey('Patient', on_delete=models.CASCADE)
+    appointment=models.ForeignKey('Appointment', on_delete=models.CASCADE)
+    date_created=models.DateTimeField(auto_now_add=True)
+    amount_due=models.DecimalField(max_digits=10,decimal_places=2)
+    amount_paid=models.DecimalField(max_digits=10,decimal_places=2)
+    date_updated=models.DateTimeField(auto_now=True)
+    payment_status=models.CharField(
+        max_length=20,
+        choices=[('Pending', 'Pending'),('Paid', 'Paid')],
+        default='Pending'
+    )
+    def balance_due(self):
+        return self.amount_due -self.amount_paid
     def __str__(self):
-        return f"Appointment for {self.patient.first_name} {self.patient.last_name} on {self.appointment_date}"
+        return f'Billing for {self.patient.first_name} {self.patient.last_name}'
+

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container text-center mt-5">
+    <h1>Welcome to Care Sync</h1>
+    <p class="lead">Effortless clinic management at your fingertips.</p>
+{#    <img src="{% static 'images/home_photo.jpg' %}" alt="Clinic Banner" class="img-fluid my-4">#}
+    <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Login</a>
+</div>
+{% endblock %}

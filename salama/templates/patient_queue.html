@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Patients in Queue</h1>
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Status</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for patient in patients %}
+            <tr>
+                <td>{{ patient.patient_name }}</td>
+                <td>{{ patient.status }}</td>
+                
+                <td>
+                    <form method="POST" action="{% url 'mark_as_done' patient.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-primary btn-sm">Mark as Done</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">No patients in queue</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
